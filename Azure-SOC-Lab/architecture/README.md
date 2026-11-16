@@ -35,4 +35,24 @@ flowchart LR
 - **NAT Gateway:** gives the VMs outbound connectivity.
 
 ## Network and exposure
-RDP (port 3389) on the Windows Server VM is not open to the internet. An NSG rule allows inbound TCP 3389 only from a single source IP address (the attacker host's own public IP) to the VM's private IP; every other source is denied by the NSG's default deny rule. This kept the brute-force test confined to a host I control rather than exposing RDP broadly.
+
+Admin access to the VMs is currently direct RDP/SSH from my own machine: an
+NSG rule (`nsg-soc`) allows inbound TCP 3389 and TCP 22 only from my own
+public IP, to each VM's private IP, with every other source denied by the
+NSG's default deny rule. This also means Win-2's RDP port is reachable from
+the internet by anyone, just not permitted past the NSG unless the source
+IP matches mine.
+
+The Hydra brute-force test itself did not go through this NSG rule at all:
+it ran from `linux-machine` directly to Win-2 over the internal virtual
+network, VM-to-VM, using private IPs only. The NSG's public-facing rule and
+the brute-force detection are two separate things; the detection would
+catch this kind of attack even if it came from outside, since it keys off
+repeated 4625 events with LogonType 3, not off where the traffic entered
+the network.
+
+**Planned improvement:** replace direct public RDP/SSH access with Azure
+Bastion, which connects over HTTPS through the Azure Portal and requires no
+public IP on the VM at all. This would remove the exposure that made the
+brute-force test possible in the first place. Bastion is shown in the
+architecture diagram as the target design, it is not deployed yet.
