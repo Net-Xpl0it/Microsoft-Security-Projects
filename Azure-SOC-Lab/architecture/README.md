@@ -2,23 +2,12 @@
 
 ## Diagram
 
-```mermaid
-flowchart LR
-    ATT["Attacker host<br/>linux-machine (Debian)<br/>Hydra"] -->|RDP brute force, port 3389| WIN
+![Architecture diagram](images/01-architecture-diagram.png)
 
-    subgraph AZ["Azure - Korea Central"]
-        subgraph NET["Virtual network"]
-            WIN["Windows Server VM<br/>Azure Monitor Agent"]
-            UBU["linux-machine (Debian)<br/>Azure Monitor Agent"]
-        end
-        NAT["NAT Gateway<br/>outbound connectivity"] --- NET
-        WIN -->|"Windows Security Events (DCR)"| LAW["Log Analytics workspace: law-soc"]
-        UBU -->|"Syslog (DCR)"| LAW
-        LAW --> SEN["Microsoft Sentinel"]
-    end
-
-    SEN --> KQL["KQL analysis and detections"]
-```
+*Note: Win-1 also sends Windows Security Events to `law-soc` through the
+same DCR as Win-2, not drawn here for simplicity. Bastion is shown as the
+planned access method; it is not yet deployed, current admin access is
+direct RDP/SSH as described below.*
 
 ## How data flows
 1. The attacker runs Hydra from `linux-machine` against RDP on the Windows Server VM, which I own, inside the same virtual network.
