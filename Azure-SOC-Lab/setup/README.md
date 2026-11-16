@@ -1,8 +1,4 @@
-## 5. Data Collection Rules
-9. Create a Data Collection Rule, `dcr-win-security`, that selects Windows Security Events and associate it with both Windows VMs (`Win-1` and `Win-2`).
-10. Create a Data Collection Rule, `dcr-linux-syslog`, that selects Syslog and associate it with `linux-machine`.
-
-![Data Collection Rules](images/05-dcr-list.png)# Setup
+# Setup
 
 Steps to rebuild this lab from scratch.
 
@@ -31,8 +27,8 @@ Steps to rebuild this lab from scratch.
 ![Sentinel enabled on workspace](images/04-sentinel-enabled.png)
 
 ## 5. Data Collection Rules
-9. Create a Data Collection Rule that selects Windows Security Events and associate it with the Windows Server VM.
-10. Create a Data Collection Rule that selects Syslog and associate it with `linux-machine`.
+9. Create a Data Collection Rule, `dcr-win-security`, that selects Windows Security Events and associate it with both Windows VMs (`Win-1` and `Win-2`).
+10. Create a Data Collection Rule, `dcr-linux-syslog`, that selects Syslog and associate it with `linux-machine`.
 
 ![Data Collection Rules](images/05-dcr-list.png)
 
