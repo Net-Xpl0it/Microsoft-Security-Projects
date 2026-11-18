@@ -21,6 +21,7 @@ Individual project by Jayasurya D K.
 | Data Collection Rules (DCR) | Define which logs the agent collects and where they go |
 | Azure NAT Gateway | Gives the VMs outbound internet connectivity |
 | Hydra | Attack tool used for the brute-force simulation |
+| Atomic Red Team | Attack emulation framework used for the ghost account simulation |
 
 ## Where to look
 - [Architecture and design](architecture/README.md)
@@ -34,3 +35,4 @@ Individual project by Jayasurya D K.
 | Event | Tool | Folder |
 |-------|------|--------|
 | RDP brute force | Hydra | [events/rdp-bruteforce](events/rdp-bruteforce/) |
+| Ghost account | Atomic Red Team | [events/ghost-account](events/ghost-account/) |
