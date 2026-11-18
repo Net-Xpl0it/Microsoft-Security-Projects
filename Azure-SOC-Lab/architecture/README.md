@@ -5,9 +5,10 @@
 ![Architecture diagram](images/01-architecture-diagram.png)
 
 *Note: Win-1 also sends Windows Security Events to `law-soc` through the
-same DCR as Win-2, not drawn here for simplicity. Bastion is shown as the
-planned access method; it is not yet deployed, current admin access is
-direct RDP/SSH as described below.*
+same DCR as Win-2, not drawn here for simplicity. Bastion (Developer SKU) is
+shown as the planned access method in the diagram; it has since been deployed
+and is used to reach Win-1. The sections below describe the original direct
+RDP/SSH design.*
 
 ## How data flows
 1. The attacker runs Hydra from `linux-machine` against RDP on the Windows Server VM, which I own, inside the same virtual network.
@@ -40,8 +41,9 @@ catch this kind of attack even if it came from outside, since it keys off
 repeated 4625 events with LogonType 3, not off where the traffic entered
 the network.
 
-**Planned improvement:** replace direct public RDP/SSH access with Azure
-Bastion, which connects over HTTPS through the Azure Portal and requires no
-public IP on the VM at all. This would remove the exposure that made the
-brute-force test possible in the first place. Bastion is shown in the
-architecture diagram as the target design, it is not deployed yet.
+**Improvement, now deployed:** Azure Bastion (Developer SKU) connects over
+HTTPS through the Azure Portal, so admin sessions do not need direct RDP/SSH
+from the internet. The Developer SKU supports one connection at a time.
+The brute-force test described here ran before Bastion was deployed, so it
+did not go through Bastion. Bastion appears in the architecture diagram as the
+target design.
