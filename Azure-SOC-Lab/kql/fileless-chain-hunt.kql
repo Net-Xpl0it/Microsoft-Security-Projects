@@ -1,0 +1,8 @@
+SecurityEvent
+| where TimeGenerated between (datetime(2026-11-18 07:47) .. datetime(2026-11-18 07:52))
+| where EventID == 4688
+| where Computer == "Win-1"
+| where CommandLine has_any ("powershell", "mshta", "reg", "rundll32", "regsvr32")
+| where NewProcessName !endswith "powershell.exe"
+| project TimeGenerated, NewProcessName, CommandLine
+| sort by TimeGenerated asc

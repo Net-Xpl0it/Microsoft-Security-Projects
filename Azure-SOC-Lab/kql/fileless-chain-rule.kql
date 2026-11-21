@@ -1,0 +1,4 @@
+SecurityEvent
+| where EventID == 4688
+| where (CommandLine has "mshta") or (CommandLine has_all ("iex", "downloadstring")) or (CommandLine has_all ("run", "reg", "add", "currentversion"))
+| project TimeGenerated, Computer, Account, NewProcessName, CommandLine, SubjectDomainName, SubjectUserName
