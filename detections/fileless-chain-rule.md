@@ -19,6 +19,18 @@ Win-1, 18 Nov 2026, 13:18 to 13:21 IST (07:48 to 07:51 UTC), generated with Atom
 | `REG ADD` into the `CurrentVersion\Run` key | T1547.001 |
 | `mshta.exe` opening a `.hta` file from the Startup folder | T1218.005, T1547.001 |
 
+The hunt query returned 40 rows for the five-minute window:
+
+![Hunt result showing the attack chain on Win-1](images/fileless-1-hunt-chain.png)
+
+The `mshta` row that opened a file from the Startup folder, expanded.
+
+
+
+`mshta.exe` opening a file from the Startup folder (13:19:08):
+
+![mshta opening a file from the Startup folder](images/fileless-3c-startup-hta-row.png)
+
 ## Rule query
 
 ```kusto
@@ -27,6 +39,10 @@ SecurityEvent
 | where (CommandLine has "mshta") or (CommandLine has_all ("iex", "downloadstring")) or (CommandLine has_all ("run", "reg", "add", "currentversion"))
 | project TimeGenerated, Computer, Account, NewProcessName, CommandLine, SubjectDomainName, SubjectUserName
 ```
+
+Test run over the previous 7 days (a time line was added only for this test and is not part of the rule):
+
+![Rule query returning 16 rows](images/fileless-2-rule-query-16-rows.png)
 
 ## Rule settings
 
@@ -39,10 +55,12 @@ SecurityEvent
 | Incident correlation | Enabled |
 | Automated actions | None |
 
+![The rule page with its triggered alerts](images/fileless-4-rule-page.png)
+
 ## Design decisions
 
 - **No time filter and no `Computer` filter.** The rule's own schedule replaces the fixed window used in the hunt, and the rule has to watch every machine.
-- **`has "mshta"` on its own.** A stricter version (`mshta` plus a URL or script word) returned 12 rows. This version returned 16, and one of the extra rows was `mshta.exe` opening a `.hta` from the Startup folder, which the stricter version missed.
+- **`has "mshta"` on its own.** A stricter version (`mshta` plus a URL or script word) returned 12 rows. This version returned 16, and one of the extra rows was `mshta.exe` opening a file from the Startup folder, which the stricter version missed.
 - **`has_all` for the Run key.** Requiring all four words keeps ordinary uses of `reg` out.
 - **No automated response.** Isolating a lab VM would lock me out of it, and in production a human should confirm first.
 - **User identity as NTDomain + Name.** The account is a local account, so UPN and Entra identifiers do not apply. `SubjectDomainName` and `SubjectUserName` matched the `Account` column in the results.
@@ -50,7 +68,10 @@ SecurityEvent
 ## Validation
 
 - Run over the previous 7 days, the query returned 16 rows, all from Win-1.
-- When the rule was created it generated 4 High alerts from the 18 Nov events. The alert shows Win-1 and `Win-1\azureuser1` as entities, and the alerts were grouped into one case.
+- When the rule was created it generated 4 High alerts from the 18 Nov events. The alert shows Win-1 and `Win-1\azureuser1` as entities, and the alerts were grouped into one case. The alert was generated on 21 Nov, when the rule was created, and its activity time is 18 Nov.
+
+![Alert details showing Win-1, the account and the case](images/fileless-5-alert-details.png)
+
 - Pending: a fresh Atomic test, to measure the delay between execution and alert.
 
 ## Limitations
