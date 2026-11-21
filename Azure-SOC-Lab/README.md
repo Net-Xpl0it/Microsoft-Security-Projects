@@ -13,26 +13,34 @@ Individual project by Jayasurya D K.
 ## Components
 | Component | Role |
 |-----------|------|
-| Windows Server VM | Target host. Produces Windows Security Events |
+| Windows Server VMs (Win-1, Win-2) | Target hosts. Produce Windows Security Events |
 | linux-machine (Debian) | Second host. Produces Linux Syslog |
 | Log Analytics workspace | Stores the collected logs |
 | Microsoft Sentinel | SIEM on top of the workspace: queries, incidents, analytics rules |
+| Microsoft Defender portal | Hosts the near-real-time custom detection rule that runs on the workspace |
 | Azure Monitor Agent (AMA) | Agent on each VM that sends logs |
 | Data Collection Rules (DCR) | Define which logs the agent collects and where they go |
 | Azure NAT Gateway | Gives the VMs outbound internet connectivity |
 | Hydra | Attack tool used for the brute-force simulation |
-| Atomic Red Team | Attack emulation framework used for the ghost account simulation |
+| Atomic Red Team | Attack emulation framework used for the ghost account and fileless attack simulations |
 
 ## Where to look
 - [Architecture and design](architecture/README.md)
 - [Setup](setup/)
 - [Events](events/)
 - [KQL queries](kql/)
-- [Detections](detections/)
+- [Detections](detections/README.md)
 - [Troubleshooting](troubleshooting.md)
 
 ## Events
-| Event | Tool | Folder |
-|-------|------|--------|
+| Event | Tool | Where |
+|-------|------|-------|
 | RDP brute force | Hydra | [events/rdp-bruteforce](events/rdp-bruteforce/) |
 | Ghost account | Atomic Red Team | [events/ghost-account](events/ghost-account/) |
+| Fileless attack chain | Atomic Red Team | [detections/fileless-chain-rule.md](detections/fileless-chain-rule.md) (hunt and rule in one write-up) |
+
+## Detections
+| Detection | Platform | Severity |
+|-----------|----------|----------|
+| [RDP brute force](detections/README.md#rdp-brute-force---multiple-failed-logons) | Sentinel scheduled query rule | Medium |
+| [Fileless attack chain](detections/fileless-chain-rule.md) | Defender custom detection (near real time) | High |

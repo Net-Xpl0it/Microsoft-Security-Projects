@@ -1,5 +1,14 @@
 # Detections
 
+Rules that run on their own and raise alerts, built from the hunting queries in [events](../events/) and [kql](../kql/).
+
+| Detection | Platform | Runs | Severity | MITRE ATT&CK | Write-up |
+|-----------|----------|------|----------|--------------|----------|
+| RDP brute force: multiple failed logons | Microsoft Sentinel scheduled query rule | Every 5 minutes, 10 minute lookback | Medium | T1110 | [Below](#rdp-brute-force---multiple-failed-logons) |
+| Fileless attack chain | Microsoft Defender custom detection | Continuous (near real time) | High | T1059.001, T1218.005, T1547.001 | [fileless-chain-rule.md](fileless-chain-rule.md) |
+
+Not yet a rule: short-lived local accounts (ghost account). It is a hunting query in [events/ghost-account](../events/ghost-account/).
+
 ## RDP Brute Force - Multiple Failed Logons
 
 A Scheduled query rule in Microsoft Sentinel, built from the hunting query
@@ -44,3 +53,15 @@ run would still correctly collapse into one alert, because of the event
 grouping setting. Separate attack runs, even close together in time,
 still produce separate incidents unless alert grouping (which groups
 alerts across multiple rule runs) is explicitly enabled.
+
+## Fileless Attack Chain
+
+A near-real-time custom detection rule in the Microsoft Defender portal, running on the `SecurityEvent` table of the Sentinel workspace. It matches process creation events (EventID 4688) whose command line shows `mshta`, a PowerShell download cradle (`IEX` with `DownloadString`), or `reg.exe` adding a Run key.
+
+- **Severity:** High
+- **MITRE ATT&CK:** T1059.001, T1218.005, T1547.001
+- **Query:** [kql/fileless-chain-rule.kql](../kql/fileless-chain-rule.kql)
+- **Hunt that led to it:** [kql/fileless-chain-hunt.kql](../kql/fileless-chain-hunt.kql)
+- **Validation:** on creation the rule raised 4 High alerts from the 18 Nov 2026 Atomic Red Team activity on Win-1, grouped into one case. A fresh test to measure the detection delay is still pending.
+
+Full write-up with evidence, design decisions and limitations: [fileless-chain-rule.md](fileless-chain-rule.md)
