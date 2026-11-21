@@ -4,11 +4,10 @@
 
 ![Architecture diagram](images/01-architecture-diagram.png)
 
-*Note: Win-1 also sends Windows Security Events to `law-soc` through the
-same DCR as Win-2, not drawn here for simplicity. Bastion (Developer SKU) is
-shown as the planned access method in the diagram; it has since been deployed
-and is used to reach Win-1. The sections below describe the original direct
-RDP/SSH design.*
+*Note: Win-1, Win-2 and linux-machine all send their logs to `law-soc`
+through the Azure Monitor Agent and Data Collection Rules. Bastion
+(Developer SKU) is deployed and is used to reach Win-1. The sections
+below describe the original direct RDP/SSH design.*
 
 ## How data flows
 1. The attacker runs Hydra from `linux-machine` against RDP on the Windows Server VM, which I own, inside the same virtual network.
