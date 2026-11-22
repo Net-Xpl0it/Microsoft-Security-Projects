@@ -1,0 +1,7 @@
+SecurityEvent
+| where TimeGenerated >= ago(10d)
+| where EventID == 4625
+| where LogonType == 3
+| summarize Failures = count() by Computer, IpAddress, bin(TimeGenerated, 1m)
+| where Failures >= 5
+| sort by Failures desc

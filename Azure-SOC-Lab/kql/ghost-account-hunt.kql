@@ -1,0 +1,13 @@
+let Window = 48h;
+let Creation = SecurityEvent
+| where TimeGenerated >= ago(Window)
+| where EventID == 4720
+| project TargetUserName, CreatedAt = TimeGenerated;
+let Deletion = SecurityEvent
+| where TimeGenerated >= ago(Window)
+| where EventID == 4726
+| project TargetUserName, DeletedAt = TimeGenerated;
+Creation
+| join kind=inner Deletion on TargetUserName
+| extend lifetimeSecs = datetime_diff('second', DeletedAt, CreatedAt)
+| project TargetUserName, DeletedAt, CreatedAt, lifetimeSecs
