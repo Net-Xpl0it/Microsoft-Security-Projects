@@ -63,7 +63,7 @@ The account `T1136.001_PowerShell` lived for 41 seconds.
 
 ## Limitations
 
-- This is a hunting query, not a detection rule. A rule would add a threshold on `lifetimeSecs` and a shorter window.
+- This is a hunting query. The detection rule that alerts on the account creation itself is in [detections/ghost-account-rule.md](../../detections/ghost-account-rule.md). A rule on short lifetimes would add a threshold on `lifetimeSecs` and a shorter window.
 - The inner join hides accounts that were created and never deleted, which is the more common persistence case. That needs a separate query.
 - Expect some false positives, such as test accounts or provisioning scripts that create and remove accounts quickly.
 - `ago(Window)` counts back from the moment the query runs, so the window must be widened for older events.

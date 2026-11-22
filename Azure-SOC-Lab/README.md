@@ -44,3 +44,4 @@ Individual project by Jayasurya D K.
 |-----------|----------|----------|
 | [RDP brute force](detections/README.md#rdp-brute-force---multiple-failed-logons) | Sentinel scheduled query rule | Medium |
 | [Fileless attack chain](detections/fileless-chain-rule.md) | Defender custom detection (near real time) | High |
+| [Local account created (ghost account)](detections/ghost-account-rule.md) | Defender custom detection (near real time) | Medium |

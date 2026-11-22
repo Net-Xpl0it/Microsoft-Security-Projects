@@ -6,8 +6,9 @@ Rules that run on their own and raise alerts, built from the hunting queries in 
 |-----------|----------|------|----------|--------------|----------|
 | RDP brute force: multiple failed logons | Microsoft Sentinel scheduled query rule | Every 5 minutes, 10 minute lookback | Medium | T1110 | [Below](#rdp-brute-force---multiple-failed-logons) |
 | Fileless attack chain | Microsoft Defender custom detection | Continuous (near real time) | High | T1059.001, T1218.005, T1547.001 | [fileless-chain-rule.md](fileless-chain-rule.md) |
+| Local account created (ghost account) | Microsoft Defender custom detection | Continuous (near real time) | Medium | T1136.001 | [ghost-account-rule.md](ghost-account-rule.md) |
 
-Not yet a rule: short-lived local accounts (ghost account). It is a hunting query in [events/ghost-account](../events/ghost-account/).
+Not yet a rule: accounts that are created and deleted within seconds. That hunting query is in [events/ghost-account](../events/ghost-account/). The rule below alerts on the account creation itself.
 
 ## RDP Brute Force - Multiple Failed Logons
 
@@ -65,3 +66,15 @@ A near-real-time custom detection rule in the Microsoft Defender portal, running
 - **Validation:** on creation the rule raised 4 High alerts from the 18 Nov 2026 Atomic Red Team activity on Win-1, grouped into one case. A fresh test to measure the detection delay is still pending.
 
 Full write-up with evidence, design decisions and limitations: [fileless-chain-rule.md](fileless-chain-rule.md)
+
+## Local Account Created (Ghost Account)
+
+A near-real-time custom detection rule in the Microsoft Defender portal, running on the `SecurityEvent` table of the Sentinel workspace. It alerts on every EventID 4720 (a user account was created), because local account creation on a server is rare and can indicate persistence.
+
+- **Severity:** Medium
+- **MITRE ATT&CK:** T1136.001
+- **Query:** [kql/ghost-account-rule.kql](../kql/ghost-account-rule.kql)
+- **Hunt that led to it:** [events/ghost-account](../events/ghost-account/)
+- **Validation:** on creation the rule raised 1 Medium alert from the 17 Nov 2026 account creation on Win-2. A fresh test to measure the detection delay is still pending.
+
+Full write-up: [ghost-account-rule.md](ghost-account-rule.md)
