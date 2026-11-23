@@ -63,7 +63,7 @@ A near-real-time custom detection rule in the Microsoft Defender portal, running
 - **MITRE ATT&CK:** T1059.001, T1218.005, T1547.001
 - **Query:** [kql/fileless-chain-rule.kql](../kql/fileless-chain-rule.kql)
 - **Hunt that led to it:** [kql/fileless-chain-hunt.kql](../kql/fileless-chain-hunt.kql)
-- **Validation:** on creation the rule raised 4 High alerts from the 18 Nov 2026 Atomic Red Team activity on Win-1, grouped into one case. A fresh test to measure the detection delay is still pending.
+- **Validation:** on creation the rule raised 4 High alerts from the 18 Nov 2026 Atomic Red Team activity on Win-1, grouped into one case. A fresh test on 23 Nov 2026 (Atomic T1218.005 test 2) matched within minutes but merged into the existing alerts rather than creating a new one, so only an upper bound (about 15 minutes) on the detection delay could be measured.
 
 Full write-up with evidence, design decisions and limitations: [fileless-chain-rule.md](fileless-chain-rule.md)
 

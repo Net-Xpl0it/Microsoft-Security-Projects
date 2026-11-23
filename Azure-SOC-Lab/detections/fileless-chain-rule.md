@@ -72,7 +72,10 @@ Test run over the previous 7 days (a time line was added only for this test and 
 
 ![Alert details showing Win-1, the account and the case](images/fileless-5-alert-details.png)
 
-- Pending: a fresh Atomic test, to measure the delay between execution and alert.
+- Fresh test (23 Nov 2026): Atomic Red Team T1218.005 test 2 (mshta runs VBScript that launches a local PowerShell command) was run on Win-1. The CommandLine was confirmed in SecurityEvent within minutes of execution. The rule did not raise a new alert row; instead the new events were added to the existing alerts for the same device and user (Win-1, azureuser1), with Last activity updated to 23 Nov 20:18. This was visible on the rule's Triggered alerts page within about 15 minutes of the test.
+- Because the match merged into an existing alert rather than creating a new one, there is no fresh Generated on time to measure an exact detection delay against, unlike the ghost account rule's fresh test. The ~15 minute figure is an upper bound based on when the page was checked, not a precise measurement.
+
+![Fresh test events merged into existing alerts](images/fileless-6-fresh-test-alert.png)
 
 ## Limitations
 
