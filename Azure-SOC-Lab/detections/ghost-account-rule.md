@@ -51,7 +51,10 @@ Test run over the previous 7 days (a time line was added only for this test and 
 
 ![Alert details showing Win-2, the new account and the case](images/ghost-3-alert-details.png)
 
-- Pending: a fresh Atomic test on Win-2, to measure the delay between the account creation and the alert.
+- Fresh test (23 Nov 2026): Atomic Red Team T1136.001 test 4 (local account created from a command prompt) was run on Win-2. The 4720 event was logged at 08:46:22 and the alert was generated at 08:50:41, so the delay from event to alert was about 4 minutes 20 seconds. Cleanup removed the account the same minute (event 4726) and the alert still fired. The test account had a different name from the first test, so it produced a separate alert instead of merging into the existing one.
+- This is a single sample. The delay includes log ingestion and rule processing, so it is not a benchmark.
+
+![Fresh test alert next to the original alert](images/ghost-4-fresh-test-alert.png)
 
 ## Limitations
 

@@ -75,6 +75,6 @@ A near-real-time custom detection rule in the Microsoft Defender portal, running
 - **MITRE ATT&CK:** T1136.001
 - **Query:** [kql/ghost-account-rule.kql](../kql/ghost-account-rule.kql)
 - **Hunt that led to it:** [events/ghost-account](../events/ghost-account/)
-- **Validation:** on creation the rule raised 1 Medium alert from the 17 Nov 2026 account creation on Win-2. A fresh test to measure the detection delay is still pending.
+- **Validation:** on creation the rule raised 1 Medium alert from the 17 Nov 2026 account creation on Win-2. A fresh test on 23 Nov 2026 (Atomic T1136.001 test 4) raised a new alert about 4 minutes 20 seconds after the account was created.
 
 Full write-up: [ghost-account-rule.md](ghost-account-rule.md)
