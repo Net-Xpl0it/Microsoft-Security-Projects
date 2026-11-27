@@ -1,0 +1,10 @@
+// SSH brute force: repeated invalid-user attempts
+// Custom detection, runs every hour with a 1 hour lookback.
+// linux-machine is key-only, so each attempt against a non-existent user
+// logs "Invalid user <name> from <ip> port <n>" once.
+Syslog
+| where ProcessName == "sshd"
+| where SyslogMessage startswith "Invalid user"
+| parse SyslogMessage with "Invalid user " User " from " SrcIp " port " Port:int
+| summarize attempts = count(), accounts = dcount(User), FirstSeen = min(TimeGenerated), LastSeen = max(TimeGenerated) by Computer, SrcIp
+| where attempts >= 5

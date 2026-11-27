@@ -1,0 +1,10 @@
+// SSH brute force: hunting version used to validate the rule.
+// Counts invalid-user attempts per source in 10 minute bins over the last day.
+Syslog
+| where TimeGenerated >= ago(1d)
+| where Computer == "linux-machine"
+| where ProcessName == "sshd"
+| where SyslogMessage startswith "Invalid user"
+| parse SyslogMessage with "Invalid user " User " from " SrcIp " port " Port:int
+| summarize attempts = count() by SrcIp, bin(TimeGenerated, 10m)
+| where attempts >= 5
