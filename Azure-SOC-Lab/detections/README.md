@@ -7,6 +7,7 @@ Rules that run on their own and raise alerts, built from the hunting queries in 
 | RDP brute force: multiple failed logons | Microsoft Sentinel scheduled query rule | Every 5 minutes, 10 minute lookback | Medium | T1110 | [Below](#rdp-brute-force---multiple-failed-logons) |
 | Fileless attack chain | Microsoft Defender custom detection | Continuous (near real time) | High | T1059.001, T1218.005, T1547.001 | [fileless-chain-rule.md](fileless-chain-rule.md) |
 | Local account created (ghost account) | Microsoft Defender custom detection | Continuous (near real time) | Medium | T1136.001 | [ghost-account-rule.md](ghost-account-rule.md) |
+| SSH brute force: repeated invalid-user attempts | Microsoft Defender custom detection (scheduled) | Every hour, 1 hour lookback | Medium | T1110 | [ssh-brute-force-rule.md](ssh-brute-force-rule.md) |
 
 Not yet a rule: accounts that are created and deleted within seconds. That hunting query is in [events/ghost-account](../events/ghost-account/). The rule below alerts on the account creation itself.
 
@@ -78,3 +79,15 @@ A near-real-time custom detection rule in the Microsoft Defender portal, running
 - **Validation:** on creation the rule raised 1 Medium alert from the 17 Nov 2026 account creation on Win-2. A fresh test on 23 Nov 2026 (Atomic T1136.001 test 4) raised a new alert about 4 minutes 20 seconds after the account was created.
 
 Full write-up: [ghost-account-rule.md](ghost-account-rule.md)
+
+## SSH Brute Force: Repeated Invalid-User Attempts
+
+A scheduled custom detection rule in the Microsoft Defender portal, running on the `Syslog` table of the Sentinel workspace. It alerts when one source makes 5 or more invalid-user SSH attempts against linux-machine within one hour.
+
+- **Severity:** Medium
+- **MITRE ATT&CK:** T1110
+- **Query:** [kql/ssh-brute-force-rule.kql](../kql/ssh-brute-force-rule.kql)
+- **Hunt used to validate it:** [kql/ssh-brute-force-hunt.kql](../kql/ssh-brute-force-hunt.kql)
+- **Validation:** on creation the rule ran once over 30 days of data and raised one Medium alert with 12 attempts. A fresh test on 27 Nov 2026 (5 attempts typed by hand from Win-1) raised a new alert generated at 12:00:59 UTC, no later than about 11 minutes after the last attempt. The test did not record whether that run was the hourly schedule or a manual Run.
+
+Full write-up: [ssh-brute-force-rule.md](ssh-brute-force-rule.md)

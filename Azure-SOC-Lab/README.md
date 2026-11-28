@@ -17,7 +17,7 @@ Individual project by Jayasurya D K.
 | linux-machine (Debian) | Second host. Produces Linux Syslog |
 | Log Analytics workspace | Stores the collected logs |
 | Microsoft Sentinel | SIEM on top of the workspace: queries, incidents, analytics rules |
-| Microsoft Defender portal | Hosts the near-real-time custom detection rule that runs on the workspace |
+| Microsoft Defender portal | Hosts the custom detection rules (near real time and scheduled) that run on the workspace |
 | Azure Monitor Agent (AMA) | Agent on each VM that sends logs |
 | Data Collection Rules (DCR) | Define which logs the agent collects and where they go |
 | Azure NAT Gateway | Gives the VMs outbound internet connectivity |
@@ -38,6 +38,7 @@ Individual project by Jayasurya D K.
 | RDP brute force | Hydra | [events/rdp-bruteforce](events/rdp-bruteforce/) |
 | Ghost account | Atomic Red Team | [events/ghost-account](events/ghost-account/) |
 | Fileless attack chain | Atomic Red Team | [detections/fileless-chain-rule.md](detections/fileless-chain-rule.md) (hunt and rule in one write-up) |
+| SSH brute force | Manual SSH attempts from Win-1 | [detections/ssh-brute-force-rule.md](detections/ssh-brute-force-rule.md) (hunt and rule in one write-up) |
 
 ## Detections
 | Detection | Platform | Severity |
@@ -45,3 +46,4 @@ Individual project by Jayasurya D K.
 | [RDP brute force](detections/README.md#rdp-brute-force---multiple-failed-logons) | Sentinel scheduled query rule | Medium |
 | [Fileless attack chain](detections/fileless-chain-rule.md) | Defender custom detection (near real time) | High |
 | [Local account created (ghost account)](detections/ghost-account-rule.md) | Defender custom detection (near real time) | Medium |
+| [SSH brute force: repeated invalid-user attempts](detections/ssh-brute-force-rule.md) | Defender custom detection (scheduled, every hour) | Medium |
